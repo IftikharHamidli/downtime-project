@@ -4,12 +4,12 @@ import numpy as np
 # =========================
 # CONFIG (burda path-ları yaz)
 # =========================
-DOWNTIME_PATH = r"Main-report-processed-final_with_qalan tickets finish 2_UPDATED loss_with_downtime_hours.xlsx"
+DOWNTIME_PATH = r"data.xlsx"
 
-AVG_1_PATH = r"yanvar - iyun dovriyye.xlsx"   # 1-6 aylar
-AVG_2_PATH = r"iyul - dekabr dovriyye.xlsx"   # 7-12 aylar
+AVG_1_PATH = r"data1.xlsx"   # 1-6 aylar
+AVG_2_PATH = r"data2.xlsx"   # 7-12 aylar
 
-OUT_PATH = r"Main-report-processed-final_with_qalan tickets finish 2_UPDATED_with_downtime_hours loss.xlsx"
+OUT_PATH = r"output data.xlsx"
 
 # Sütun adların fərqlidirsə buranı dəyiş
 DT_TERMINAL_COL = "terminal_id"
