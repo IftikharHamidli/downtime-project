@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Build 'cleaned-sec2-small.xlsx' style output:
+Build 'data1' style output:
 - STEP 1: Compute Working_hours_diff from "HH:MM-HH:MM"
 - STEP 2: Dedup by (Terminal_ID, Address, Displacement_date)
 - STEP 3: Output sheets: Deduped, Summary
@@ -12,8 +12,8 @@ import re
 from datetime import datetime, timedelta
 
 # ====== Fayl yolları ======
-IN_PATH  = r"terminals location aprel for working hours.xlsx"
-OUT_PATH = r"aprel-location-cleaned-sec2-small.xlsx"
+IN_PATH  = r"data.xlsx"
+OUT_PATH = r"data1.xlsx"
 
 # ---------------------------
 # Köməkçi funksiyalar
