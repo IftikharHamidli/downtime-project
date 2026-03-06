@@ -9,8 +9,8 @@ MAX_NEAR_DAYS = 2   # 1 → near1, 2 → near2
 # =============================
 # OXU
 # =============================
-df_down = pd.read_excel("Stop finish.xlsx")
-df_disp = pd.read_excel("Displacement full.xlsx")
+df_down = pd.read_excel("data.xlsx")
+df_disp = pd.read_excel("data1.xlsx")
 
 # =============================
 # TARİXLƏR
