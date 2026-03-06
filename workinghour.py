@@ -4,9 +4,9 @@ import numpy as np
 # ==========================
 # Fayl yollarını BURADA dəyiş
 # ==========================
-PROBLEMS_PATH  = r"9.Aprel texniki 2025.xlsx"              # Stop sheet olan fayl
-TERMINALS_PATH = r"aprel-location-cleaned-sec2-small.xlsx"  # Deduped sheet olan fayl
-OUT_FILE       = r"9.Aprel texniki 2025 - with working hours (FINAL).xlsx"
+PROBLEMS_PATH  = r"data.xlsx"              # Stop sheet olan fayl
+TERMINALS_PATH = r"data1.xlsx"  # Deduped sheet olan fayl
+OUT_FILE       = r"data2.xlsx"
 
 
 def norm_tid(s, width=5):
