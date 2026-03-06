@@ -1,23 +1,15 @@
 # -*- coding: utf-8 -*-
-"""
-Build 'data1' style output:
-- STEP 1: Compute Working_hours_diff from "HH:MM-HH:MM"
-- STEP 2: Dedup by (Terminal_ID, Address, Displacement_date)
-- STEP 3: Output sheets: Deduped, Summary
-"""
 
 import pandas as pd
 import numpy as np
 import re
 from datetime import datetime, timedelta
 
-# ====== Fayl yolları ======
+
 IN_PATH  = r"data.xlsx"
 OUT_PATH = r"data1.xlsx"
 
-# ---------------------------
-# Köməkçi funksiyalar
-# ---------------------------
+
 def find_col(cols, patterns):
     pats = [p.lower() for p in patterns]
     for c in cols:
@@ -33,16 +25,14 @@ def normalize_address_series(s: pd.Series) -> pd.Series:
     )
 
 
-# ---------------------------------------------------------
-# Təhlükəsiz TARİX PARSER – Overflow error YOXDUR
-# ---------------------------------------------------------
+
 def parse_date_series(series: pd.Series) -> pd.Series:
     """Serial + string tarixləri təhlükəsiz çevirir, overflow vermir."""
     
-    # 1) Normal parse (dd/mm/yyyy və ya yyyy-mm-dd)
+   
     parsed_str = pd.to_datetime(series, dayfirst=True, errors="coerce")
 
-    # 2) Excel serialları parse
+   
     numeric = pd.to_numeric(series, errors="coerce")
 
     def excel_safe(x):
@@ -54,7 +44,7 @@ def parse_date_series(series: pd.Series) -> pd.Series:
         except:
             return None
 
-        # Excel serial range (praktik limit)
+        
         if not (0 <= x <= 60000):
             return None
 
@@ -66,7 +56,7 @@ def parse_date_series(series: pd.Series) -> pd.Series:
 
     parsed_serial = numeric.apply(excel_safe)
 
-    # 3) Birini seç: əvvəl string parse, sonra serial parse
+    
     result = []
     for d_txt, d_ser in zip(parsed_str, parsed_serial):
         if pd.notna(d_txt):
@@ -77,9 +67,7 @@ def parse_date_series(series: pd.Series) -> pd.Series:
     return pd.Series(result)
 
 
-# ---------------------------------------------------------
-# Working Hours hesablanması
-# ---------------------------------------------------------
+
 WH_24_SET = {"24", "24:00", "00:00-24:00"}
 
 def working_hours_to_diff_int(val):
@@ -100,15 +88,13 @@ def working_hours_to_diff_int(val):
     end   = h2*60 + m2
 
     diff_min = end - start
-    if diff_min < 0:  # gecə keçidi
+    if diff_min < 0:  
         diff_min += 24*60
 
     return int(diff_min // 60)
 
 
-# ---------------------------------------------------------
-# 1) RAW oxu
-# ---------------------------------------------------------
+
 df = pd.read_excel(IN_PATH)
 
 term_col = find_col(df.columns, ["terminal_id", "terminal id"])
@@ -123,16 +109,12 @@ if not (term_col and addr_col and date_col):
     )
 
 
-# ---------------------------------------------------------
-# 2) Working_hours_diff
-# ---------------------------------------------------------
+
 if wh_col:
     df["Working_hours_diff"] = df[wh_col].apply(working_hours_to_diff_int)
 
 
-# ---------------------------------------------------------
-# 3) Dedup
-# ---------------------------------------------------------
+
 df["_addr_norm"] = normalize_address_series(df[addr_col])
 df["_date_only"] = parse_date_series(df[date_col])
 
@@ -143,9 +125,7 @@ dup_mask = df.duplicated(
 df_keep = df.loc[~dup_mask].copy()
 
 
-# ---------------------------------------------------------
-# 4) Output sütunları
-# ---------------------------------------------------------
+
 final_cols_map = {
     term_col: "Terminal_ID",
     addr_col: "Address",
@@ -164,9 +144,7 @@ if sec2_col:
 deduped_out = df_keep[list(final_cols_map.keys())].rename(columns=final_cols_map)
 
 
-# ---------------------------------------------------------
-# 5) Excelə yaz (heç bir row limit yoxdur)
-# ---------------------------------------------------------
+
 with pd.ExcelWriter(OUT_PATH, engine="openpyxl") as w:
     deduped_out.to_excel(w, index=False, sheet_name="Deduped")
     pd.DataFrame({
@@ -174,4 +152,5 @@ with pd.ExcelWriter(OUT_PATH, engine="openpyxl") as w:
         "Value":  [len(df), len(df_keep), len(df) - len(df_keep)]
     }).to_excel(w, index=False, sheet_name="Summary")
 
-print("Hazır:", OUT_PATH)
+print("READY:", OUT_PATH)
+
